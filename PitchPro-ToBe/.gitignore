@@ -1,0 +1,15 @@
+# Workspace, local data and generated output
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+coverage/
+*.log
+*.zip

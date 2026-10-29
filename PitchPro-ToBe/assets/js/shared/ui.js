@@ -1,0 +1,40 @@
+/* PitchPro modular frontend. Load scripts in the order specified by index.html. */
+'use strict';
+
+  function renderDashboard(){
+    const today=localDay(), ts=totalsForDay(today), todayB=daysBookings(today), openCount=state.invoices.filter(i=>i.status==='awaiting'||i.status==='qr_pending').length;
+    const paidTotal=ts.cash+ts.bank, booked=todayB.filter(b=>b.status==='booked').length, using=todayB.filter(b=>b.status==='using').length;
+    const sessions=todayB.slice().sort((a,b)=>a.start.localeCompare(b.start));
+    return heading('TRUNG TÂM ĐIỀU HÀNH','Tổng quan hoạt động','Theo dõi lịch sân, thanh toán và công việc cần xử lý trong ngày.',btn('+ Tạo đặt sân','booking','','primary')+btn('Đối soát cuối ngày','goto','doi-soat'))+
+      `<div class="alert neutral">Giao diện mô phỏng theo <b>To-Be</b>. Số liệu thu là các khoản đã được nhập/xác minh thủ công trên FE; không thay thế đối soát thực tế với ngân hàng.</div>`+
+      `<div class="stats-grid">${stat('Lượt đặt sân hôm nay',todayB.length,'Gồm các lượt chưa hủy','▤')}${stat('Đang sử dụng sân',using,`${booked} lượt đang chờ nhận sân`,'⚽','blue')}${stat('Tiền thu ghi nhận hôm nay',money(paidTotal),'Tiền mặt và chuyển khoản đã xác minh','↗')}${stat('Hóa đơn cần xử lý',openCount,'Không tính các hóa đơn nháp','◷','amber')}</div>`+
+      `<div class="layout-2"><section class="surface"><div class="panel-head"><div><div class="panel-title">Lịch sử dụng sân trong ngày</div><div class="panel-caption">Danh sách theo thời gian · ${dayLabel(today)}</div></div>${btn('Xem tất cả','goto','lich-san','small')}</div><div class="table-wrap"><table><thead><tr><th>Sân</th><th>Khách / đội bóng</th><th>Khung giờ</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>${sessions.map(b=>`<tr><td class="strong">${pitchOf(b.pitchId).name}</td><td>${esc(b.name)}</td><td>${b.start}–${b.end}</td><td>${tag(b.status,stages)}</td><td>${b.status==='booked'?btn('Nhận sân','start',b.id,'small soft'):b.status==='using'?btn('Trả sân','release',b.id,'small'):btn('Xem','invoice',b.invoiceId,'small')}</td></tr>`).join('')||'<tr><td colspan="5">Chưa có lượt đặt</td></tr>'}</tbody></table></div></section><section class="surface"><div class="panel-head"><div class="panel-title">Ưu tiên xử lý</div>${tag(unresolvedIssues()?'pending':'resolved',issueStages)}</div><div class="split-summary"><div class="summary-tile"><small>Thanh toán cần theo dõi</small><strong>${openCount}</strong></div><div class="summary-tile"><small>Yêu cầu chưa xong</small><strong>${unresolvedIssues()}</strong></div></div><div class="divider"></div><div class="panel-title">Nhật ký gần đây</div><div class="activity-list">${recent(4)}</div>${btn('Xem nhật ký','goto','nhat-ky','full')}</section></div>
+      <section class="surface" style="margin-top:20px"><div class="panel-head"><div><div class="panel-title">Tham chiếu kết quả mô phỏng BIMP</div><div class="panel-caption">Nguồn BTH3.1 · Kết quả của kịch bản mô phỏng, không phải tốc độ đang đo trên FE</div></div></div><div class="layout-2"><div><div class="metric-row"><strong>Quy trình 01 · Xử lý dịch vụ và thanh toán</strong><strong>−70,07%</strong></div><div class="chart-row"><span class="chart-row-label">As-Is: 15,37′</span><div class="chart-track"><div class="chart-track-fill" style="width:100%;background:#a2b6a9"></div></div></div><div class="chart-row"><span class="chart-row-label">To-Be: 4,60′</span><div class="chart-track"><div class="chart-track-fill" style="width:29.93%"></div></div></div></div><div><div class="metric-row"><strong>Quy trình 02 · Tổng hợp & đối soát</strong><strong>−67,75%</strong></div><div class="chart-row"><span class="chart-row-label">As-Is: 40,00′</span><div class="chart-track"><div class="chart-track-fill" style="width:100%;background:#a2b6a9"></div></div></div><div class="chart-row"><span class="chart-row-label">To-Be: 12,90′</span><div class="chart-track"><div class="chart-track-fill" style="width:32.25%"></div></div></div></div></div><p class="inline-note" style="margin-bottom:0">Các kịch bản chưa xác nhận đồng nhất hoàn toàn về điều kiện mô phỏng; không dùng phần trăm cải thiện này để cam kết hiệu suất vận hành thực tế.</p></section>${FOOT}`;
+  }
+  function renderAudit(){return heading('TRUY VẾT & KIỂM SOÁT','Nhật ký thao tác','Theo dõi ai đã thay đổi trạng thái hóa đơn, khoản thu và phê duyệt.',btn('Xuất nhật ký CSV','export','audit','small')+btn('Khôi phục dữ liệu demo','reset','','small danger'))+
+    `<section class="surface"><div class="activity-list">${recent(100)}</div></section>${FOOT}`;}
+  function render(){
+    const valid=['tong-quan','lich-san','hoa-don','kho-hang','doi-soat','ngoai-le','nhat-ky'];
+    let target=location.hash.slice(1)||'tong-quan';if(!valid.includes(target))target='tong-quan';page=target;
+    const pages={'tong-quan':['Bảng điều khiển',renderDashboard],'lich-san':['Lịch & đặt sân',renderSchedule],'hoa-don':['Hóa đơn & thanh toán',renderInvoices],'kho-hang':['Kho & dịch vụ',renderInventory],'doi-soat':['Đối soát cuối ngày',renderReconcile],'ngoai-le':['Yêu cầu & ngoại lệ',renderIssues],'nhat-ky':['Nhật ký thao tác',renderAudit]};
+    $('appContent').innerHTML=pages[page][1]();$('breadcrumbCurrent').textContent=pages[page][0];
+    document.querySelectorAll('[data-page]').forEach(x=>{x.classList.toggle('active',x.dataset.page===page);if(x.dataset.page===page)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});
+    $('navBillCount').textContent=countOpen();$('navIssueCount').textContent=unresolvedIssues();$('roleSelect').value=role;
+    $('sidebar').classList.remove('open');
+  }
+  function navigate(p){location.hash=p; if(location.hash.slice(1)===p)render();window.scrollTo({top:0,behavior:'smooth'});}
+  function openModal(title,body,footer='',wide=false){$('modalRoot').innerHTML=`<div class="modal-backdrop" id="backdrop" role="presentation"><section class="modal-card ${wide?'wide':''}" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-heading"><h2 id="modalTitle">${title}</h2><button type="button" class="modal-close" data-action="modal-close" aria-label="Đóng">×</button></div>${body}<div class="modal-footer">${footer||btn('Đóng','modal-close')}</div></section></div>`;}
+  function closeModal(){$('modalRoot').innerHTML='';}
+  function field(label,name,kind='text',value='',extra=''){return `<div class="field"><label for="m_${name}">${label}</label><input id="m_${name}" name="${name}" type="${kind}" value="${esc(value)}" ${extra}></div>`;}
+  function selectField(label,name,options,selected=''){return `<div class="field"><label for="m_${name}">${label}</label><select id="m_${name}" name="${name}">${options.map(o=>`<option value="${esc(o[0])}" ${String(o[0])===String(selected)?'selected':''}>${esc(o[1])}</option>`).join('')}</select></div>`;}
+  function formBtns(formid,text){return `${btn('Hủy','modal-close') }<button type="submit" form="${formid}" class="btn primary">${text}</button>`;}
+  function makeForm(id,fields,description=''){return `${description?`<p class="modal-description">${description}</p>`:''}<form id="${id}" class="form-grid">${fields}</form>`;}
+  function guarded(fn){try{fn();}catch(e){toast(e?.message||'Không thể thực hiện thao tác',true);}}
+  function downloadCSV(kind){
+    const rows=kind==='audit'? [['Thời gian','Tác nhân demo','Hành động'],...state.audits.map(a=>[niceTime(a.createdAt),a.actor,a.message])]:
+      [['Ngày','Loại','Mã phiếu','Hóa đơn','Phương thức','Số tiền','Mã tham chiếu'],...dayReceipts(reconDay).map(r=>[reconDay,r.type,r.id,r.invoiceId,r.method,r.amount,r.reference])];
+    const safeCell = x=>{const s=String(x??'');const noFormula=/^[=+@\-\t\r]/.test(s.trimStart())?`'${s}`:s;return `"${noFormula.replace(/"/g,'""')}"`;};
+    const csv='\ufeff'+rows.map(row=>row.map(safeCell).join(',')).join('\r\n');
+    const a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.href=url;a.download=kind==='audit'?'pitchpro-nhat-ky.csv':`pitchpro-doi-soat-${reconDay}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
