@@ -1,0 +1,289 @@
+
+/* Giữ giao diện gọn và chống tràn khung ở mọi trang. */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.app-shell,
+.main,
+.main-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.main {
+  overflow-x: clip;
+}
+
+.main-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.main-content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Grid luôn được phép thu nhỏ. */
+.layout-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.layout-2 > *,
+.stats-grid > *,
+.surface,
+.panel,
+.pitch-card,
+.issue-card,
+.stat-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pitch-grid {
+  grid-template-columns:
+    repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+}
+
+/* Bảng tự cuộn ngang thay vì làm vỡ bố cục. */
+.table-wrap {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table {
+  width: 100%;
+  min-width: 590px;
+  border-collapse: collapse;
+}
+
+.table-wrap th,
+.table-wrap td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: middle;
+}
+
+.table-wrap th {
+  white-space: nowrap;
+}
+
+/* Nút, tiêu đề, bộ lọc không bị đẩy khỏi màn hình. */
+.btn-row,
+.heading-actions,
+.toolbar,
+.filters,
+.panel-head,
+.page-heading,
+.topbar,
+.header-left,
+.top-actions {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  max-width: 100%;
+  text-align: center;
+}
+
+.issue-head,
+.issue-body,
+.issue-meta,
+.activity-item,
+.pitch-detail,
+.stat-label,
+.stat-value,
+.stat-foot,
+.panel-title,
+.kpi-line,
+.moneyline {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Hộp thoại thích ứng chiều rộng và chiều cao. */
+.modal-backdrop {
+  padding: 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal-card,
+.modal-card.wide {
+  width: min(100%, 760px);
+  max-width: calc(100vw - 28px);
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
+}
+
+.form-grid,
+.two-amounts,
+.split-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field,
+.field input,
+.field select,
+.field textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Lịch sân, tiến trình và các thẻ thông tin. */
+.calendar-strip {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  overflow-x: auto;
+}
+
+.schedule-board {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.step-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat-value {
+  font-size: clamp(19px, 2.2vw, 29px);
+}
+
+.sidebar {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav-link {
+  min-width: 0;
+}
+
+.nav-link > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.nav-count {
+  flex-shrink: 0;
+}
+
+/* Loại bỏ chú thích kỹ thuật dư thừa. */
+.page-footer,
+.page-heading .eyebrow,
+.page-heading p,
+.main-content > .alert.neutral,
+.inline-note {
+  display: none !important;
+}
+
+.page-heading {
+  margin-bottom: 20px;
+}
+
+.page-heading h1 {
+  margin: 0;
+}
+
+/* Màn hình laptop vừa. */
+@media (max-width: 1250px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Máy tính bảng. */
+@media (max-width: 820px) {
+  .main-content {
+    padding: 18px 13px 30px;
+  }
+
+  .page-heading {
+    align-items: stretch;
+  }
+
+  .topbar {
+    gap: 7px;
+  }
+
+  .header-left {
+    flex: 1;
+  }
+
+  .top-actions {
+    flex-shrink: 0;
+  }
+
+  .modal-card,
+  .modal-card.wide {
+    max-width: calc(100vw - 16px);
+  }
+}
+
+/* Điện thoại. */
+@media (max-width: 560px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form-grid,
+  .two-amounts,
+  .split-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar-strip {
+    min-width: 0;
+    gap: 3px;
+  }
+
+  .day-pill {
+    min-width: 0;
+    padding: 9px 2px;
+  }
+
+  .btn-row > .btn,
+  .heading-actions > .btn {
+    white-space: normal;
+  }
+
+  .modal-backdrop {
+    padding: 8px;
+  }
+
+  .modal-card {
+    padding: 14px;
+  }
+}
+
+@media print {
+  .main {
+    overflow: visible;
+  }
+
+  .main-content {
+    max-width: none;
+  }
+}

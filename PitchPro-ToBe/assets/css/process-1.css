@@ -1,0 +1,301 @@
+
+/* Quy trình 1: giao diện lịch sân, bán hàng và thanh toán. */
+
+.p1-toolbar,
+.p1-invoice-head,
+.p1-slot-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.p1-date-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #49695c;
+}
+
+.p1-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: #6e8377;
+  font-size: 11px;
+  margin: 0 0 14px;
+}
+
+.p1-legend span:first-child {
+  color: #20855c;
+}
+
+.p1-legend span:nth-child(2) {
+  color: #5574b0;
+}
+
+.p1-grid {
+  grid-template-columns:
+    repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.p1-card {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.p1-card .pitch-top {
+  align-items: center;
+  min-width: 0;
+}
+
+.p1-card .pitch-nr {
+  font-size: 20px;
+}
+
+.p1-rate {
+  font-size: 12px;
+  color: #668273;
+  margin-bottom: 3px;
+}
+
+.p1-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.p1-slot {
+  background: #f8fbf9;
+  border: 1px solid #e1ece4;
+  border-radius: 11px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.p1-slot-live {
+  background: #edf8f1;
+  border-color: #a8ddbb;
+}
+
+.p1-slot-top {
+  font-size: 12px;
+}
+
+.p1-slot-top .tag {
+  font-size: 10px;
+}
+
+.p1-customer {
+  font-size: 13px;
+  font-weight: 800;
+  color: #204f3c;
+  margin: 9px 0 3px;
+  overflow-wrap: anywhere;
+}
+
+.p1-subtotal {
+  font-size: 11px;
+  color: #728c7b;
+  margin-bottom: 10px;
+}
+
+.p1-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.p1-actions .btn {
+  white-space: normal;
+  margin: 0;
+  padding: 8px 10px;
+  flex: 1 1 auto;
+  font-size: 11px;
+}
+
+.p1-empty {
+  font-size: 12px;
+  color: #849a8e;
+  padding: 18px 8px;
+  text-align: center;
+  background: #fafcfa;
+  border-radius: 10px;
+}
+
+.p1-invoice-head {
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.p1-invoice-head h3 {
+  margin: 0;
+  color: #234c3e;
+  font-size: 18px;
+}
+
+.p1-invoice-head p {
+  margin: 5px 0;
+  color: #6a8976;
+  font-size: 12px;
+}
+
+.p1-invoice-head small {
+  color: #91a69a;
+}
+
+.p1-receipt-title {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.p1-total {
+  font-size: 15px;
+  color: #145b3f;
+}
+
+.p1-checkout-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.p1-checkout-actions .btn {
+  white-space: normal;
+}
+
+.p1-receipt-history {
+  margin-top: 20px;
+  border-top: 1px solid #e9efe9;
+  padding-top: 12px;
+}
+
+.p1-receipt-history h4 {
+  font-size: 12px;
+  margin: 0 0 8px;
+  color: #476454;
+}
+
+.p1-receipt-ref {
+  display: block;
+  font-size: 10px;
+  color: #8aa090;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.p1-payment-note {
+  background: #fff7e7;
+  border: 1px solid #f1dfb4;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #8a641c;
+  overflow-wrap: anywhere;
+}
+
+.p1-invoice-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.p1-summary-strip {
+  padding: 12px 15px;
+  border: 1px solid #e4ebe6;
+  border-radius: 11px;
+  background: #fff;
+  margin: 0 0 18px;
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  align-items: center;
+}
+
+.p1-summary-strip b {
+  color: #1d684a;
+}
+
+/* Chống tràn khung. */
+
+.main,
+.main-content,
+.surface,
+.pitch-card,
+.p1-grid,
+.p1-slots {
+  min-width: 0;
+}
+
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table {
+  min-width: 760px;
+}
+
+.modal-card {
+  max-width: calc(100vw - 24px);
+}
+
+.moneyline > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1180px) {
+  .p1-invoice-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .p1-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .p1-invoice-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .p1-card {
+    padding: 13px;
+  }
+
+  .p1-legend {
+    gap: 10px;
+  }
+
+  .p1-actions .btn {
+    flex: 1 1 44%;
+  }
+
+  .p1-checkout-actions .btn {
+    flex: 1 1 100%;
+  }
+
+  .calendar-strip {
+    overflow-x: auto;
+  }
+
+  .day-pill {
+    min-width: 42px;
+  }
+}

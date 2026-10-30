@@ -1,0 +1,634 @@
+
+/* PitchPro - Lịch sân gọn và hóa đơn chờ */
+
+.p1-board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(265px, 305px);
+  gap: 14px;
+  align-items: start;
+  min-width: 0;
+}
+
+.p1-board-main,
+.p1-right {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Lịch tuần */
+
+.p1-week-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #e3ebe5;
+  border-radius: 11px;
+  margin-bottom: 11px;
+  min-width: 0;
+}
+
+.p1-week-strip > .btn {
+  flex: 0 0 28px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.p1-week-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.p1-day {
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 2px;
+  background: #f6faf7;
+  color: #688172;
+  text-align: center;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.p1-day.active {
+  background: #167d57;
+  color: #fff;
+}
+
+.p1-day small,
+.p1-day strong {
+  display: block;
+  white-space: nowrap;
+}
+
+.p1-day small {
+  font-size: 9px;
+}
+
+.p1-day strong {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.p1-week-strip .date-input {
+  width: 118px;
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 7px 5px;
+}
+
+/* Bảng lịch thu nhỏ */
+
+.p1-timeline-wrapper {
+  background: #fff;
+  border: 1px solid #e2ebe5;
+  border-radius: 11px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.p1-timeline-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 12px;
+  border-bottom: 1px solid #e6eee8;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.p1-timeline-heading span {
+  font-size: 10px;
+  color: #819488;
+}
+
+/* Chiều cao hiển thị bảng: 255px */
+.p1-timeline-scroll {
+  height: 255px;
+  max-height: 255px;
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.p1-timeline-grid {
+  display: grid;
+  grid-template-columns:
+    52px repeat(var(--p1-n), minmax(106px, 1fr));
+  width: 100%;
+  position: relative;
+}
+
+.p1-time-corner,
+.p1-time-pitch-head {
+  height: 35px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: #f4f8f6;
+  border-right: 1px solid #e2ebe5;
+  border-bottom: 1px solid #e2ebe5;
+}
+
+.p1-time-corner {
+  font-size: 10px;
+  color: #628073;
+}
+
+.p1-time-pitch-head b {
+  font-size: 11px;
+  color: #214c39;
+}
+
+.p1-time-pitch-head small {
+  font-size: 9px;
+  color: #819388;
+}
+
+.p1-time-axis {
+  height: 816px;
+  position: relative;
+  background: #f8faf9;
+  border-right: 1px solid #e2ebe5;
+}
+
+.p1-time-axis > div {
+  position: absolute;
+  transform: translateY(-4px);
+  height: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: #7c8d83;
+}
+
+.p1-time-track {
+  position: relative;
+  height: 816px;
+  min-width: 0;
+  border-right: 1px solid #e2ebe5;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 16px,
+    #eef3ee 16px,
+    #eef3ee 17px,
+    transparent 17px,
+    transparent 33px,
+    #dce7de 33px,
+    #dce7de 34px
+  );
+}
+
+.p1-empty-slot {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 17px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.p1-empty-slot:hover {
+  background: #1a9b6230;
+}
+
+/* Các khối lịch */
+
+.p1-tl-block {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  width: calc(100% - 6px);
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+  text-align: left;
+
+  border: 1px solid #b1c7ee;
+  border-left: 3px solid #718ac4;
+  border-radius: 5px;
+
+  background: #eaf0ff;
+  color: #345488;
+  padding: 3px 5px;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.15;
+}
+
+.p1-tl-block b {
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p1-tl-block span {
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.p1-tl-block small {
+  font-size: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Đang sử dụng: xanh lá */
+.p1-tl-block.using {
+  background: #dcf7e6;
+  border-color: #83d0a3;
+  border-left-color: #249d6a;
+  color: #105b3f;
+}
+
+/* Đã trả sân: xám */
+.p1-tl-block.completed {
+  background: #eff3f0;
+  border-color: #d8e1da;
+  border-left-color: #96a89a;
+  color: #697b6f;
+}
+
+.p1-tl-block.cancel_review {
+  background: #fff3d9;
+  border-color: #edcf90;
+  border-left-color: #dba547;
+  color: #795b21;
+}
+
+.p1-tl-block:hover {
+  z-index: 5;
+  box-shadow: 0 3px 9px #173d2826;
+}
+
+.p1-time-now {
+  height: 2px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #e07958;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Bộ lọc sân */
+
+.p1-pitch-filter {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 12px 0 10px;
+}
+
+.p1-pitch-filter button {
+  background: #fff;
+  border: 1px solid #e2ebe5;
+  border-radius: 7px;
+  padding: 7px 10px;
+  color: #698071;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.p1-pitch-filter button.active {
+  background: #e8f6ee;
+  border-color: #9cd5b6;
+  color: #146942;
+}
+
+/* Thẻ sân */
+
+.p1-card-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(min(100%, 205px), 1fr));
+  gap: 10px;
+}
+
+.p1-pitch-card {
+  min-width: 0;
+  padding: 12px;
+  gap: 6px;
+}
+
+.p1-pitch-card .pitch-nr {
+  font-size: 16px;
+}
+
+.p1-pitch-card .tag {
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.p1-pitch-rate {
+  font-size: 10px;
+  color: #82958a;
+}
+
+.p1-pitch-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 48px;
+
+  background: #f9fcfa;
+  border: 1px solid #edf1ec;
+  border-radius: 8px;
+  padding: 9px;
+
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  color: #30513d;
+}
+
+.p1-pitch-detail small {
+  font-size: 10px;
+  color: #758c7c;
+}
+
+.p1-pitch-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.p1-pitch-actions .btn {
+  flex: 1 1 45%;
+  margin: 0;
+  padding: 7px;
+  font-size: 10px;
+  white-space: normal;
+}
+
+.p1-pitch-actions .btn[disabled] {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Hóa đơn cần xử lý bên phải */
+
+.p1-right {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e2ebe5;
+  border-radius: 11px;
+  overflow: hidden;
+
+  position: sticky;
+  top: 79px;
+  max-height: min(660px, calc(100dvh - 105px));
+}
+
+.p1-right-title {
+  padding: 13px 12px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.p1-number {
+  background: #e5f5ed;
+  border-radius: 15px;
+  padding: 3px 8px;
+  color: #14714c;
+  font-weight: 800;
+}
+
+.p1-right-tabs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 0 11px 10px;
+  border-bottom: 1px solid #e5eee7;
+}
+
+.p1-right-tabs button {
+  font-size: 10px;
+  font-weight: 650;
+  padding: 6px 8px;
+  border-radius: 16px;
+
+  border: 1px solid #e4ebe5;
+  background: #fafcfb;
+  color: #698071;
+  cursor: pointer;
+}
+
+.p1-right-tabs button.active {
+  background: #187d56;
+  color: #fff;
+  border-color: #187d56;
+}
+
+.p1-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  overflow-y: auto;
+  padding: 10px;
+  min-height: 100px;
+}
+
+.p1-pending-card {
+  border: 1px solid #e3ebe5;
+  border-radius: 9px;
+  padding: 10px;
+  background: #fcfdfc;
+  min-width: 0;
+}
+
+.p1-pending-card.p1-flash {
+  border-color: #27a36c;
+  box-shadow: 0 0 0 2px #27a36c20;
+}
+
+.p1-pending-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.p1-pending-head strong {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.p1-pending-card > small {
+  display: block;
+  font-size: 10px;
+  color: #809387;
+  margin: 5px 0 8px;
+}
+
+.p1-pending-items {
+  border-top: 1px dashed #e5ece6;
+  padding-top: 7px;
+}
+
+.p1-pending-items > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 7px;
+  padding: 2px 0;
+  font-size: 10px;
+}
+
+.p1-pending-items span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.p1-pending-items b {
+  white-space: nowrap;
+}
+
+.p1-pending-foot {
+  margin-top: 7px;
+  padding-top: 8px;
+  border-top: 1px solid #e5ece6;
+  font-size: 12px;
+}
+
+.p1-pending-foot b {
+  color: #116c48;
+}
+
+/* Chọn thanh toán ngay tại hóa đơn */
+
+.p1-pay-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.p1-pay-actions .btn {
+  margin: 0;
+  padding: 7px 4px;
+  min-width: 0;
+  white-space: normal;
+  font-size: 10px;
+}
+
+.p1-pay-actions .btn:last-child {
+  grid-column: 1 / -1;
+}
+
+.p1-pending-empty {
+  padding: 24px 5px;
+  color: #87988c;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* QR mô phỏng */
+
+.p1-qr-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+
+  background: #f6faf8;
+  border: 1px solid #e3ebe5;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+.p1-qr-preview strong {
+  font-size: 13px;
+}
+
+.p1-qr-preview img {
+  background: #fff;
+  border: 5px solid #fff;
+  border-radius: 6px;
+}
+
+.p1-qr-preview small {
+  font-size: 11px;
+  color: #71887a;
+  max-width: 290px;
+}
+
+/* Laptop và màn hình nhỏ */
+
+@media (max-width: 1220px) {
+  .p1-board-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .p1-right {
+    max-height: 400px;
+    position: static;
+  }
+
+  .p1-pending-list {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .p1-week-strip {
+    flex-wrap: wrap;
+  }
+
+  .p1-week-days {
+    order: 2;
+    flex-basis: 100%;
+  }
+
+  .p1-week-strip .date-input {
+    margin-left: auto;
+  }
+
+  .p1-timeline-heading span {
+    display: none;
+  }
+
+  .p1-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .p1-pending-list {
+    display: flex;
+  }
+
+  .p1-timeline-scroll {
+    height: 220px;
+    max-height: 220px;
+  }
+}
